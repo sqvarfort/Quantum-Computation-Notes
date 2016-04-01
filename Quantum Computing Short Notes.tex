@@ -1,0 +1,276 @@
+\input{../../UCLHeader.tex}
+\input{../../UCLCommands.tex}
+\begin{document}
+\title{Quantum Computation -- Short Notes}
+\author{Sofia Qvarfort}
+\maketitle
+\tableofcontents
+\section{Summary of lectures}
+\begin{description}
+
+\item[Toffoli gate] is the CCNOT gate. It is universal for Classical computation. 
+
+\item[Classical universal set] given by 
+\beq
+\{H, CNOT\}
+\eeq
+
+\item[Quantum universal set] 
+is given by 
+\beq
+\{CNOT, H, R_{\pi/4} \}
+\eeq
+
+
+\item[Solovay-Kitaev's Theorem] says that universal sets are equivalent and that a quantum speed-up is robust w.r.t. gate sets. 
+
+
+
+
+
+\end{description}
+Proof of the no cloning theorem
+Pauli, Hadamard, Phase gate and CNOT matrices
+Deutsch and Deutsch-Josza circuits
+Grover algorithm circuit
+Quantum Fourier transform, prove that it's unitary
+Know how to construct a graph state
+Compare and constrast different paradigms of computation: gate-based, adiabatic, measurement-based
+Phase estimation
+Shor's Algorithm
+Hidden subgroup problem
+
+\section{No-cloning Theorem}
+Prove this by unitarity or linearity. 
+
+\section{Quantum Fourier Transform}
+\begin{description}
+\item[Definition] The QFT is defined as
+\beq
+\ket{j} = \frac{1}{\sqrt{q}} \sum_{k = 0}^{q-1} e^{ 2 \pi i jk/q} \ket{k}
+\eeq
+It maps $\ket{j} \rightarrow \ket{\chi_j}$. 
+
+\item[Action]
+What the QFT does is changing the basis of a group. It changes the basis into the irrep basis. That is, given some random basis, we can map the basis onto the computational basis. 
+
+\item[Lexographic notation] makes it easier to index binary sequences. For a bit
+\beq
+\ket{x} = \ket{x_1 x_2 \ldots x_n}
+\eeq
+We can write
+\beq
+x = x_1 2^{n-1} + x_2 2^{n-2} + \ldots  + x_n 2^0
+\eeq
+Such that for two qubits, we find
+\begin{align}
+\ket{00} &= \ket{0}  \\
+\ket{01} &= \ket{1} \\
+\ket{10} &= \ket{2} \\
+\ket{11} &= \ket{3}
+\end{align}
+
+\item[Fractional binary notation] is an easy way to write sums
+\beq
+[0.x_1 \ldots x_n] = \sum_{k = 1}^m \frac{x_k}{2^k}
+\eeq
+
+\item[Compact notation of QFT] We will here show the derivation of a more compact notation. We know that 
+\beq
+\ket{j} = \frac{1}{\sqrt{q}} \sum_{k = 0}^{q-1} e^{ 2 \pi i jk/q} \ket{k}
+\eeq
+We will work with a two-qubit example. So, 
+\begin{align}
+\mathcal{F}\ket{x} &= \frac{1}{2} \sum_{k = 0}^3 \omega^{jk} \ket{k} \\
+&= \frac{1}{2} \left( \ket{0} + \omega^{2x_1 + x_2}\ket{1} + \omega^{2(2x_1 + x_2)}\ket{2} + \omega^{3(2x_1 + x_2)} \ket{3} \right) \\
+&= \frac{1}{2} \left( \ket{00} + \omega^{2x_1 + x_2} \ket{01} + \omega^{2(2x_1 + x_2)}\ket{10} + \omega^{3(2x_1 + x_2)} \ket{11} \right)
+\end{align}
+Any $\omega^4 = 1$, which means that we can simplify the above to 
+\begin{align}
+\mathcal{F}\ket{x} &= \frac{1}{2} \left( \ket{00} + \omega^{2x_1 + x_2} \ket{01} + \omega^{2x_2} \ket{10} + \omega^{2x_1 + 3x_2} \ket{11} \right) \\
+&= \frac{1}{2} \left( \ket{0} + \omega^{2x_2} \ket{1} \right) \left( \ket{0} + \omega^{2x_1 + x_2 } \ket{1} \right) \\
+&=\frac{1}{2} \left( \ket{0} + e^{2 \pi i \frac{x_2}{2} } \ket{1} \right) \left( \ket{0} + e^{2\pi i \left( \frac{x_1}{2} + \frac{x_2}{4} \right)} \ket{1} \right) \\
+&= \frac{1}{2} \left( \ket{0} + e^{2\pi i 0.x_2} \ket{1} \right) \left( \ket{0} + e^{2\pi i 0.x_1 x_2} \ket{1} \right)
+\end{align}
+This can easily be generalised to more qubits. 
+
+\end{description}
+
+\section{Pauli, Hadamard, Phase gate and CNOT gate}
+They are given by 
+\beq
+X = \bpmat 0 & 1 \\ 1 & 0 \epmat
+\eeq
+\beq
+Y = \bpmat 0 & -i \\ i & 0 \epmat
+\eeq
+\beq
+Z = \bpmat 1 & 0 \\ 0 & -1\epmat
+\eeq
+\beq
+H = \frac{1}{\sqrt{2}} \bpmat 1 & 1 \\ 1 & - 1\epmat
+\eeq
+
+
+\section{The Hidden Subgroup Problem}
+\begin{description}
+\item[Significance]
+The hidden subgroup problem is important because it is essentially equivalent to Shor's algorithm. 
+
+\item[Complexity] Some instances of the HS problem belongs in NP. There is no general solution for this problem. 
+
+\item[Key idea] Lets say that we have a function $f$ that classifies elements in each coset of a subgroup into a certain constant number. Then, given only this function, can we find $H$ such that we find its generators? 
+
+\item[Formal statement] For a group $G$ and a subgroup $H: |H|<|G|$, we say that a function $f: G \rightarrow X$ onto the set $X$ `hides the group' $H$ if $\forall g_1 , g_2 \in G, f(g_1) = f(g_2)$. This is equivalent to $g_1 H = g_2 H$. That is, $f$ is constant within the cosets of $H$. 
+
+The question is: 
+
+\end{description}
+
+\section{Adiabatic Quantum Computation}
+\begin{description}
+\item[Quantum Adiabatic Computation] is a class of procedures for solving optimization problems using a quantum computer. 
+
+\item[Basic strategy]:
+\begin{itemize}
+\item Design a Hamiltonian whose ground state encodes the solutions of an optimisation problem. 
+\item Prepare the known ground state of a simple Hamiltonian. 
+\item Interpolate slowly
+\end{itemize}
+
+\item[Realistic physical Hamiltonians] look like
+\beq
+H = \sum_{\braket{i,j}} H_{ij}
+\eeq
+where $\braket{\cdots}$ denote nearest neighbour. 
+
+\item[Construction] We can either construct a universal quantum computer that can simulate all Hamiltonians, or we can build a computer specific for the problem. 
+
+\item[Adiabatic Theorem] Let $H(s)$ be a smoothly varying Hamiltonian for $s \in [0,1]$. Decompose it as
+\beq
+H(x) = \sum_{j = 0}^{D-1} E_j(x) \ket{E_j(x)}\bra{E_j(x)}
+\eeq
+
+where 
+\beq
+E_0(s)<E_1(s) \leq E_2(s) \leq \ldots \leq E_{D-1} (s)
+\eeq
+Let $\ket{\psi_T} =\ket{E_0(0)}$, and thus as $T \rightarrow \infty$
+\beq
+|\braket{E_0(1) |\psi_T}|^2 \rightarrow 1
+\eeq
+What this is saying is that measuring the state as $T \rightarrow \infty$ makes it increasingly likely to turn out to be the ground state of the new Hamiltonian. 
+
+\item[Total run time] depends on the gap $\Delta$ of the Hamiltonian. 
+\beq
+\Delta (s) = E_1(s) - E_0(s)
+\eeq
+A rough estimate suggests, 
+\beq
+T \gg \frac{\Gamma^2}{\Delta^2}
+\eeq
+
+
+\item[Computing the gap] can be done in 
+\beq
+\geq \frac{1}{Poly(N)}
+\eeq
+with an efficient quantum algorithm. 
+
+\item[Uses]
+\begin{itemize}
+\item Unstructured search
+\item Transverse Ising Model
+\item Fisher's Problem
+\end{itemize}
+
+\item[Fisher's problem] is the problem of interval estimation and hypothesis testing concering the means of two normally distributed populations with unequal variances. 
+
+\item[Sources of error] 
+\begin{itemize}
+\item Unitary control error - the gap may change during the computation, which affects the estimated computation time. 
+\item Error in the final Hamiltonian -- we end up in the wrong Hamiltonian (I think)
+\item Interpolation error -- Not sure
+\item Thermal noise -- Probably what it says on the tin... 
+\end{itemize}
+
+\item[Open problems] include developing fault-tolerance for adiabatic quantum computers, various issues with the gap of the Hamiltonian, working with a constant gap. 
+
+\end{description}
+
+\section{Graph States}
+\begin{description}
+\item[Key idea] We wish to come up with a way to easily depict and manipulate cluster states, or states with complicated entanglement connections. 
+
+\item[Definition of a graph] We write $G = (E,V)$ where $G$ is the graph, $E$ are the edges, and $V$ are the matrices. These are sets. 
+
+\item[Interactions] We consider some kind of Ising model with interactions between nearest neightbours. 
+
+\item[Adjacent vertices] When vertices $a, b \in V$ are each the endpoint of an edge, they are adjacent. 
+
+\item[Adjacency matrix] $\Gamma_G$ associated with the graph $G$ outlines the connections.  If $V$ is the set of all vertices $V = \{a_1 , \ldots , a_N\}$ then $\Gamma_G$ is a symmetric $N \times N$ matrix with elements
+\beq
+\Gamma_G = 
+\begin{cases} 1, &\mbox{if } \{a_i, a_j\}\in E \\ 
+0 & \mbox{otherwise} \end{cases} 
+\eeq
+
+\item[Graph state] Every graph $G = (V,E)$ can be associated with a graph state. It is a pure quantum state on a Hilbert space
+\beq
+\Hilbert_V = (\mathbb{C}^2  ) ^{\otimes V}
+\eeq
+Each vertex labels a qubit. 
+
+\item[Vertex operator] To every vertex (qubit) $a \in V$ of the graph $G= (V,E)$ we attach a Hermitian operator
+\beq
+K^{(a)}_G = \sigma_x^{(a)} \prod_{b \in N_a} \sigma_z^{(b)}
+\eeq
+where by $N_a$ we mean the neighbourhood of $a$ -- every other vertex directly connected to $a$. $\sigma_x$ and $\sigma_z$ are operators that act on the system. 
+
+Using the adjacency matrix, we can express this as
+\beq
+K_G^{(a)} = \sigma_x ^{(a)} \prod_{b \in V} \left( \sigma_z ^{(b)} \right)^{\Gamma_{ab}}
+\eeq
+That is, when $\Gamma_{ab} = 0$, there is not interaction because the neighbour doesn't exist. 
+
+There are $N = |V| $ operators. They all commute. A set of operators $\{K^{(a)}_G\}$ corresponding to all vertices has a common set of eigenvectors. This is the graph state. 
+
+\item[Graph state definition] given the operators $K^{(a)}_G$, the graph state $\ket{G}$ is defined as
+\beq
+K^{(a)}_G \ket{G}  = \ket{G} , \forall a \in V
+\eeq
+
+\item[Connection to stabilisers] The finite Abelian group $S$ is generated by the $K^{(a)}_G$ operators. That is, 
+\beq
+S = \braket{\{K^{(a)}_G\}_{a \in V} }
+\eeq
+This is the stabiliser group of the graph state $\ket{G}$. 
+
+\item[The empty graph] is just the state $\ket{+}^{\otimes n}$. 
+
+\item[Initialising graph state] The graph state $\ket{G}$ can be obtained by applying a sequence of commuting unitaries acting on two qubits on the empty state. That is, 
+\beq
+\ket{G} = \prod_{(a,b) \in E} U^{\{a,b\} } \ket{+}^{\otimes V}
+\eeq
+The unitary $U^{\{a,b\} }$ adds or removes edges! It is a $CZ$ on qubits $a$ and $b$. 
+\beq
+U^{\{a,b\} } = \bpmat 1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & -1
+\epmat
+\eeq
+
+\item[Entanglement] Applying $U^{\{a,b\} }$ onto $\ket{+}\ket{+}$ creates a maximally entangled state. 
+\beq
+U^{\{a,b\} } \ket{+}\ket{+} = \frac{1}{2} \left( \ket{00} + \ket{01} + \ket{10} - \ket{11} \right)
+\eeq
+
+\end{description}
+
+\section{Random Walks}
+\begin{description}
+\item[Graph-walk connection] We can write down a graph that denotes the degrees of freedom for a particle. That is, if a particle can move one step per time unit, the graph shows us 
+
+\end{description}
+\end{document}
